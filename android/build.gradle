@@ -7,6 +7,10 @@ buildscript {
         google()
         mavenCentral()
     }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.1.0'
+    }
 }
 
 apply plugin: 'com.android.library'
@@ -27,6 +31,9 @@ android {
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", "true"
         buildConfigField "int", "MIN_SDK_VERSION", "25"
         buildConfigField "int", "TARGET_SDK_VERSION", "34"
+
+        // Enable unit testing
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildFeatures {
@@ -43,14 +50,26 @@ android {
         disable 'MissingTranslation'
         warning 'InvalidPackage'
     }
+
+    // Test options
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+        }
+    }
 }
 
 repositories {
     google()
     mavenCentral()
     maven {
-        // React Native's repository
-        url "$rootDir/../node_modules/react-native/android"
+        // React Native's repository - try both standalone and parent project paths
+        url "$projectDir/../../node_modules/react-native/android"
+    }
+    maven {
+        // Fallback to mavenLocal if react-native not found
+        url mavenLocal()
     }
 }
 
@@ -59,4 +78,17 @@ dependencies {
     implementation 'com.facebook.react:react-android'
     implementation 'androidx.core:core:1.12.0'
     implementation 'androidx.work:work-runtime:2.9.0'
+
+    // Testing dependencies
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:5.7.0'
+    testImplementation 'org.mockito:mockito-inline:5.2.0'
+    testImplementation 'org.robolectric:robolectric:4.11.1'
+    testImplementation 'androidx.test:core:1.5.0'
+    testImplementation 'androidx.test.ext:junit:1.1.5'
+
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'org.mockito:mockito-android:5.7.0'
 }
