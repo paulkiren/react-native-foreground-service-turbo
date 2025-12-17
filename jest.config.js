@@ -1,9 +1,9 @@
 module.exports = {
-  preset: "react-native",
-  modulePathIgnorePatterns: ["<rootDir>/example/node_modules", "<rootDir>/lib/"],
-  setupFiles: ["<rootDir>/jest.setup.js"],
-  testMatch: ["**/__tests__/**/*.test.[jt]s?(x)"],
-  collectCoverageFrom: ["src/**/*.{ts,tsx}", "!src/**/*.d.ts", "!src/types.ts"],
+  preset: 'react-native',
+  modulePathIgnorePatterns: ['<rootDir>/example/node_modules', '<rootDir>/lib/'],
+  setupFiles: ['<rootDir>/jest.setup.js'],
+  testMatch: ['**/__tests__/**/*.test.[jt]s?(x)'],
+  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.d.ts', '!src/types.ts'],
   coverageThreshold: {
     global: {
       branches: 70,
@@ -12,8 +12,8 @@ module.exports = {
       statements: 70,
     },
   },
-  testEnvironment: "node",
+  testEnvironment: 'node',
   transformIgnorePatterns: [
-    "node_modules/(?!(react-native|@react-native|@react-native-community)/)",
+    'node_modules/(?!(react-native|@react-native|@react-native-community)/)',
   ],
 };

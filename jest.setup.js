@@ -15,7 +15,7 @@ const mockNativeForegroundService = {
 };
 
 // Mock React Native modules
-jest.mock("react-native", () => ({
+jest.mock('react-native', () => ({
   NativeModules: {
     ForegroundService: mockNativeForegroundService,
   },
@@ -30,17 +30,17 @@ jest.mock("react-native", () => ({
     registerComponent: jest.fn(),
   },
   Platform: {
-    OS: "android",
+    OS: 'android',
     Version: 34,
   },
   PermissionsAndroid: {
-    request: jest.fn(() => Promise.resolve("granted")),
+    request: jest.fn(() => Promise.resolve('granted')),
     PERMISSIONS: {
-      POST_NOTIFICATIONS: "android.permission.POST_NOTIFICATIONS",
+      POST_NOTIFICATIONS: 'android.permission.POST_NOTIFICATIONS',
     },
     RESULTS: {
-      GRANTED: "granted",
-      DENIED: "denied",
+      GRANTED: 'granted',
+      DENIED: 'denied',
     },
   },
   TurboModuleRegistry: {

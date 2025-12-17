@@ -7,10 +7,10 @@
  * @packageDocumentation
  */
 
-import ForegroundServiceManager from "./ForegroundServiceManager";
+import ForegroundServiceManager from './ForegroundServiceManager';
 
 // Export types for TypeScript users
-export * from "./types";
+export * from './types';
 
 // Export the manager as default export for backward compatibility
 export default ForegroundServiceManager;

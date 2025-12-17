@@ -1,17 +1,17 @@
 /**
  * Service types for Android 14+ foreground services
  */
-export type ServiceType = "dataSync" | "location" | "mediaPlayback";
+export type ServiceType = 'dataSync' | 'location' | 'mediaPlayback';
 
 /**
  * Notification visibility levels
  */
-export type NotificationVisibility = "private" | "public" | "secret";
+export type NotificationVisibility = 'private' | 'public' | 'secret';
 
 /**
  * Notification importance levels
  */
-export type NotificationImportance = "none" | "min" | "low" | "default" | "high" | "max";
+export type NotificationImportance = 'none' | 'min' | 'low' | 'default' | 'high' | 'max';
 
 /**
  * Notification button configuration
