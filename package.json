@@ -1,0 +1,96 @@
+{
+  "name": "@kirenpaul/rn-foreground-service-turbo",
+  "version": "1.0.0",
+  "description": "Modern Android foreground service with TurboModule support for React Native 0.68+. Full Android 14 compliance with task management, customizable notifications, and event handling.",
+  "main": "lib/commonjs/index.js",
+  "module": "lib/module/index.js",
+  "types": "lib/typescript/src/index.d.ts",
+  "react-native": "src/index.tsx",
+  "source": "src/index.tsx",
+  "files": [
+    "src",
+    "lib",
+    "android",
+    "turbomodule-specs",
+    "scripts",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__"
+  ],
+  "scripts": {
+    "postinstall": "node scripts/postinstall.js",
+    "typescript": "tsc --noEmit",
+    "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "prepare": "bob build",
+    "release": "release-it"
+  },
+  "keywords": [
+    "react-native",
+    "android",
+    "foreground-service",
+    "turbomodule",
+    "new-architecture",
+    "background-tasks",
+    "notification",
+    "headless-task",
+    "android-14",
+    "android-13"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/paulkiren/rn-foreground-service-turbo.git"
+  },
+  "author": {
+    "name": "Kiren Paul",
+    "email": "kiren.paul@example.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/paulkiren/rn-foreground-service-turbo/issues"
+  },
+  "homepage": "https://github.com/paulkiren/rn-foreground-service-turbo#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": ">=0.68.0"
+  },
+  "devDependencies": {
+    "@react-native-community/eslint-config": "^3.2.0",
+    "@types/react": "^18.2.0",
+    "@types/react-native": "^0.72.0",
+    "eslint": "^8.50.0",
+    "prettier": "^3.0.0",
+    "react": "18.2.0",
+    "react-native": "0.72.0",
+    "react-native-builder-bob": "^0.23.0",
+    "release-it": "^16.0.0",
+    "typescript": "^5.2.0"
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      [
+        "typescript",
+        {
+          "project": "tsconfig.build.json"
+        }
+      ]
+    ]
+  },
+  "codegenConfig": {
+    "name": "RNForegroundServiceSpec",
+    "type": "modules",
+    "jsSrcsDir": "turbomodule-specs",
+    "android": {
+      "javaPackageName": "com.kirenpaul.foregroundservice"
+    }
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}

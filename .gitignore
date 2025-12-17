@@ -1,0 +1,37 @@
+# OSX
+.DS_Store
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build
+lib/
+dist/
+*.tgz
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Android
+*.iml
+.gradle
+/android/build/
+/android/.cxx/
+/android/local.properties
+
+# Example app
+/example/node_modules/
+/example/android/build/
+/example/android/.gradle/
+/example/ios/build/
+/example/ios/Pods/
+
+# Misc
+*.log
+.env

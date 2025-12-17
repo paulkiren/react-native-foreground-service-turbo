@@ -1,0 +1,24 @@
+# Source
+*.ts
+*.tsx
+!*.d.ts
+
+# Tests
+__tests__/
+__fixtures__/
+__mocks__/
+
+# Config
+.eslintrc.js
+.prettierrc.js
+tsconfig.json
+tsconfig.build.json
+
+# Example
+example/
+
+# Misc
+.DS_Store
+*.log
+.vscode/
+.idea/
