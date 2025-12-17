@@ -1,8 +1,8 @@
-# @kirenpaul/rn-foreground-service-turbo
+# @kirenpaul/react-native-foreground-service-turbo
 
 Modern React Native foreground service library with TurboModule support. Full Android 14 compliance with task management, customizable notifications, and event handling.
 
-[![NPM Version](https://img.shields.io/npm/v/@kirenpaul/rn-foreground-service-turbo.svg)](https://www.npmjs.com/package/@kirenpaul/rn-foreground-service-turbo)
+[![NPM Version](https://img.shields.io/npm/v/@kirenpaul/react-native-foreground-service-turbo.svg)](https://www.npmjs.com/package/@kirenpaul/react-native-foreground-service-turbo)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Android-green.svg)](https://www.android.com)
 [![React Native](https://img.shields.io/badge/React%20Native-0.68+-blue.svg)](https://reactnative.dev/)
@@ -22,13 +22,13 @@ Modern React Native foreground service library with TurboModule support. Full An
 ## Installation
 
 ```bash
-npm install @kirenpaul/rn-foreground-service-turbo
+npm install @kirenpaul/react-native-foreground-service-turbo
 ```
 
 or
 
 ```bash
-yarn add @kirenpaul/rn-foreground-service-turbo
+yarn add @kirenpaul/react-native-foreground-service-turbo
 ```
 
 **Requirements:**
@@ -43,7 +43,7 @@ yarn add @kirenpaul/rn-foreground-service-turbo
 In your `index.js` or `index.tsx`:
 
 ```typescript
-import ForegroundService from '@kirenpaul/rn-foreground-service-turbo';
+import ForegroundService from '@kirenpaul/react-native-foreground-service-turbo';
 import { AppRegistry } from 'react-native';
 import { name as appName } from './app.json';
 import App from './App';
@@ -73,7 +73,7 @@ async function requestNotificationPermission() {
 ### 3. Start the Service
 
 ```typescript
-import ForegroundService from '@kirenpaul/rn-foreground-service-turbo';
+import ForegroundService from '@kirenpaul/react-native-foreground-service-turbo';
 
 async function startService() {
   // Request permission first (Android 13+)
@@ -313,7 +313,7 @@ useEffect(() => {
 ### Download Manager
 
 ```typescript
-import ForegroundService from '@kirenpaul/rn-foreground-service-turbo';
+import ForegroundService from '@kirenpaul/react-native-foreground-service-turbo';
 
 class DownloadManager {
   async startDownload(url: string, filename: string) {
@@ -363,7 +363,7 @@ class DownloadManager {
 ### Location Tracker
 
 ```typescript
-import ForegroundService from '@kirenpaul/rn-foreground-service-turbo';
+import ForegroundService from '@kirenpaul/react-native-foreground-service-turbo';
 import Geolocation from '@react-native-community/geolocation';
 
 async function startLocationTracking() {
@@ -519,6 +519,6 @@ Based on the original work by [Raja Osama (supersami)](https://github.com/raja0s
 
 ## Links
 
-- [GitHub Repository](https://github.com/paulkiren/rn-foreground-service-turbo)
-- [NPM Package](https://www.npmjs.com/package/@kirenpaul/rn-foreground-service-turbo)
-- [Issue Tracker](https://github.com/paulkiren/rn-foreground-service-turbo/issues)
+- [GitHub Repository](https://github.com/paulkiren/react-native-foreground-service-turbo)
+- [NPM Package](https://www.npmjs.com/package/@kirenpaul/react-native-foreground-service-turbo)
+- [Issue Tracker](https://github.com/paulkiren/react-native-foreground-service-turbo/issues)

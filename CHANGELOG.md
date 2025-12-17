@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2025-12-17
+
+### Changed
+
+- **Package Name**: Renamed from `@kirenpaul/rn-foreground-service-turbo` to `@kirenpaul/react-native-foreground-service-turbo`
+  - Follows React Native naming conventions for better discoverability
+  - Maintains scoped package namespace for security and branding
+
+### Fixed - Critical Issues
+
+- **Race Condition in Service State Management**: Added `serviceStarting` flag and native state synchronization to prevent duplicate service starts
+- **Missing Task Cleanup**: Tasks are now automatically cleared on service stop (configurable with `clearTasks` option)
+- **Native Handler Cleanup**: Added `cleanupResources()` method to properly clean up handler callbacks on service stop
+- **Notification Event Delivery**: Created `NotificationEventReceiver.java` to properly deliver notification button click events to React Native
+
+### Breaking Changes
+
+- **stop() Method**: Now clears tasks by default. Use `stop({ clearTasks: false })` to preserve tasks.
+
+### Migration
+
+- See [MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md) for detailed upgrade instructions
+
+---
+
 ## [1.0.0] - 2025-12-17
 
 ### Added
@@ -105,5 +130,5 @@ See [MIGRATION.md](./MIGRATION.md) for detailed instructions on migrating from v
 
 ## Support
 
-- **Issues**: https://github.com/paulkiren/rn-foreground-service-turbo/issues
-- **Discussions**: https://github.com/paulkiren/rn-foreground-service-turbo/discussions
+- **Issues**: https://github.com/paulkiren/react-native-foreground-service-turbo/issues
+- **Discussions**: https://github.com/paulkiren/react-native-foreground-service-turbo/discussions
