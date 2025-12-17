@@ -7,6 +7,8 @@
 __tests__/
 __fixtures__/
 __mocks__/
+**/test/
+android/src/test/
 
 # Config
 .prettierrc.js

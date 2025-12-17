@@ -42,7 +42,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/paulkiren/react-native-foreground-service-turbo.git"
+    "url": "git+https://github.com/paulkiren/react-native-foreground-service-turbo.git"
   },
   "author": {
     "name": "Kiren Paul",
