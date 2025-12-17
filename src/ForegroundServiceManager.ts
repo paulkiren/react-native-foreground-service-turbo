@@ -1,17 +1,12 @@
-import {
-  NativeModules,
-  NativeEventEmitter,
-  AppRegistry,
-  Platform,
-} from 'react-native';
-import NativeForegroundService from '../turbomodule-specs/NativeForegroundService';
+import { NativeModules, NativeEventEmitter, AppRegistry, Platform } from "react-native";
+import NativeForegroundService from "../turbomodule-specs/NativeForegroundService";
 import type {
   StartServiceConfig,
   Task,
   TaskOptions,
   NotificationClickEvent,
   EventListenerCleanup,
-} from './types';
+} from "./types";
 
 /**
  * High-level manager for React Native Foreground Service
@@ -31,9 +26,7 @@ class ForegroundServiceManager {
   private static serviceRunning = false;
   private static serviceStarting = false; // Prevent race conditions
   private static samplingInterval = 500; // milliseconds
-  private static eventEmitter = new NativeEventEmitter(
-    NativeModules.ForegroundService
-  );
+  private static eventEmitter = new NativeEventEmitter(NativeModules.ForegroundService);
 
   /**
    * Register the foreground service task runner
@@ -53,7 +46,7 @@ class ForegroundServiceManager {
    */
   static register(): void {
     if (!this.serviceRunning) {
-      AppRegistry.registerHeadlessTask('myTaskName', () => this.taskRunner);
+      AppRegistry.registerHeadlessTask("myTaskName", () => this.taskRunner);
     }
   }
 
@@ -75,8 +68,8 @@ class ForegroundServiceManager {
    * ```
    */
   static async start(config: StartServiceConfig): Promise<void> {
-    if (Platform.OS !== 'android') {
-      console.warn('ForegroundService is only supported on Android');
+    if (Platform.OS !== "android") {
+      console.warn("ForegroundService is only supported on Android");
       return;
     }
 
@@ -84,30 +77,29 @@ class ForegroundServiceManager {
     if (!config.serviceType) {
       console.warn(
         'Warning: serviceType not specified. Defaulting to "dataSync". ' +
-          'This is required for Android 14+.'
+          "This is required for Android 14+."
       );
-      config.serviceType = 'dataSync';
+      config.serviceType = "dataSync";
     }
 
     // Check POST_NOTIFICATIONS permission (Android 13+)
-    const hasPermission =
-      await NativeForegroundService.checkPostNotificationsPermission();
+    const hasPermission = await NativeForegroundService.checkPostNotificationsPermission();
     if (!hasPermission) {
       throw new Error(
-        'POST_NOTIFICATIONS permission not granted. ' +
-          'Please request this permission before starting the service:\n\n' +
+        "POST_NOTIFICATIONS permission not granted. " +
+          "Please request this permission before starting the service:\n\n" +
           'import { PermissionsAndroid, Platform } from "react-native";\n' +
           'if (Platform.OS === "android" && Platform.Version >= 33) {\n' +
-          '  await PermissionsAndroid.request(\n' +
-          '    PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS\n' +
-          '  );\n' +
-          '}'
+          "  await PermissionsAndroid.request(\n" +
+          "    PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS\n" +
+          "  );\n" +
+          "}"
       );
     }
 
     // Prevent race condition: Check if already starting
     if (this.serviceStarting) {
-      console.log('Service is already starting, please wait...');
+      console.log("Service is already starting, please wait...");
       return;
     }
 
@@ -115,7 +107,7 @@ class ForegroundServiceManager {
     const nativeRunningCount = await NativeForegroundService.isRunning();
     if (nativeRunningCount > 0) {
       this.serviceRunning = true;
-      console.log('Foreground service is already running.');
+      console.log("Foreground service is already running.");
       return;
     }
 
@@ -130,7 +122,7 @@ class ForegroundServiceManager {
 
       // Start task runner
       await NativeForegroundService.runTask({
-        taskName: 'myTaskName',
+        taskName: "myTaskName",
         delay: this.samplingInterval,
         loopDelay: this.samplingInterval,
         onLoop: true,
@@ -156,7 +148,7 @@ class ForegroundServiceManager {
    * ```
    */
   static async update(config: StartServiceConfig): Promise<void> {
-    if (Platform.OS !== 'android') {
+    if (Platform.OS !== "android") {
       return;
     }
 
@@ -174,7 +166,7 @@ class ForegroundServiceManager {
    * @param options.clearTasks Whether to clear all tasks (default: false)
    */
   static async stop(options?: { clearTasks?: boolean }): Promise<void> {
-    if (Platform.OS !== 'android') {
+    if (Platform.OS !== "android") {
       return;
     }
 
@@ -188,7 +180,7 @@ class ForegroundServiceManager {
       // Clear tasks if requested or if service fully stopped
       if (options?.clearTasks !== false) {
         this.tasks = {};
-        console.log('Service stopped and all tasks cleared');
+        console.log("Service stopped and all tasks cleared");
       }
     }
   }
@@ -199,7 +191,7 @@ class ForegroundServiceManager {
    * This will also clear all tasks and reset state
    */
   static async stopAll(): Promise<void> {
-    if (Platform.OS !== 'android') {
+    if (Platform.OS !== "android") {
       return;
     }
 
@@ -211,7 +203,7 @@ class ForegroundServiceManager {
 
     await NativeForegroundService.stopServiceAll();
 
-    console.log('Service force stopped and all tasks cleared');
+    console.log("Service force stopped and all tasks cleared");
   }
 
   /**
@@ -246,10 +238,7 @@ class ForegroundServiceManager {
    * );
    * ```
    */
-  static add_task(
-    task: () => Promise<void> | void,
-    options: TaskOptions = {}
-  ): string {
+  static add_task(task: () => Promise<void> | void, options: TaskOptions = {}): string {
     const taskId = options.taskId || this.generateTaskId();
     const delay = options.delay || 5000;
     const onLoop = options.onLoop !== undefined ? options.onLoop : true;
@@ -349,7 +338,7 @@ class ForegroundServiceManager {
    * @param id Notification ID to cancel
    */
   static async cancel_notification(id: number): Promise<void> {
-    if (Platform.OS !== 'android') {
+    if (Platform.OS !== "android") {
       return;
     }
 
@@ -380,13 +369,8 @@ class ForegroundServiceManager {
    * }, []);
    * ```
    */
-  static eventListener(
-    callback: (event: NotificationClickEvent) => void
-  ): EventListenerCleanup {
-    const subscription = this.eventEmitter.addListener(
-      'notificationClickHandle',
-      callback
-    );
+  static eventListener(callback: (event: NotificationClickEvent) => void): EventListenerCleanup {
+    const subscription = this.eventEmitter.addListener("notificationClickHandle", callback);
 
     return () => subscription.remove();
   }
@@ -422,7 +406,7 @@ class ForegroundServiceManager {
 
       await Promise.all(promises);
     } catch (error) {
-      console.error('Error in ForegroundService taskRunner:', error);
+      console.error("Error in ForegroundService taskRunner:", error);
     }
   };
 
@@ -431,7 +415,7 @@ class ForegroundServiceManager {
    * @private
    */
   private static generateTaskId(): string {
-    return 'x'.repeat(12).replace(/[xy]/g, () => {
+    return "x".repeat(12).replace(/[xy]/g, () => {
       const r = (Math.random() * 16) | 0;
       return r.toString(16);
     });
@@ -445,27 +429,27 @@ class ForegroundServiceManager {
     return {
       id: config.id,
       title: config.title || String(config.id),
-      message: config.message || 'Foreground Service Running...',
+      message: config.message || "Foreground Service Running...",
       vibration: config.vibration || false,
-      visibility: config.visibility || 'public',
-      icon: config.icon || 'ic_notification',
-      largeIcon: config.largeIcon || 'ic_launcher',
-      importance: config.importance || 'max',
-      number: config.number || '1',
+      visibility: config.visibility || "public",
+      icon: config.icon || "ic_notification",
+      largeIcon: config.largeIcon || "ic_launcher",
+      importance: config.importance || "max",
+      number: config.number || "1",
       button: !!config.button,
-      buttonText: config.button?.text || '',
-      buttonOnPress: config.button?.onPressEvent || 'buttonOnPress',
+      buttonText: config.button?.text || "",
+      buttonOnPress: config.button?.onPressEvent || "buttonOnPress",
       button2: !!config.button2,
-      button2Text: config.button2?.text || '',
-      button2OnPress: config.button2?.onPressEvent || 'button2OnPress',
-      mainOnPress: config.mainOnPress || 'mainOnPress',
+      button2Text: config.button2?.text || "",
+      button2OnPress: config.button2?.onPressEvent || "button2OnPress",
+      mainOnPress: config.mainOnPress || "mainOnPress",
       progressBar: !!config.progress,
       progressBarMax: config.progress?.max || 0,
       progressBarCurr: config.progress?.curr || 0,
       color: config.color,
       setOnlyAlertOnce: config.setOnlyAlertOnce !== false, // default true
       ongoing: config.ongoing || false,
-      serviceType: config.serviceType || 'dataSync',
+      serviceType: config.serviceType || "dataSync",
     };
   }
 }

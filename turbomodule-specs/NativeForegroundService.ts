@@ -1,5 +1,5 @@
-import type { TurboModule } from 'react-native';
-import { TurboModuleRegistry } from 'react-native';
+import type { TurboModule } from "react-native";
+import { TurboModuleRegistry } from "react-native";
 
 /**
  * Notification configuration for foreground service
@@ -9,10 +9,10 @@ export interface NotificationConfig {
   title: string;
   message: string;
   vibration?: boolean;
-  visibility?: 'private' | 'public' | 'secret';
+  visibility?: "private" | "public" | "secret";
   icon?: string;
   largeIcon?: string;
-  importance?: 'none' | 'min' | 'low' | 'default' | 'high' | 'max';
+  importance?: "none" | "min" | "low" | "default" | "high" | "max";
   number?: string;
   button?: boolean;
   buttonText?: string;
@@ -32,7 +32,7 @@ export interface NotificationConfig {
    * Required for Android 14 and above
    * @default 'dataSync'
    */
-  serviceType?: 'dataSync' | 'location' | 'mediaPlayback';
+  serviceType?: "dataSync" | "location" | "mediaPlayback";
 }
 
 /**
@@ -182,4 +182,4 @@ export interface Spec extends TurboModule {
   };
 }
 
-export default TurboModuleRegistry.getEnforcing<Spec>('ForegroundService');
+export default TurboModuleRegistry.getEnforcing<Spec>("ForegroundService");
