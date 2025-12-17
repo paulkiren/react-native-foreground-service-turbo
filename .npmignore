@@ -21,3 +21,28 @@ example/
 *.log
 .vscode/
 .idea/
+
+# Documentation (keep only README, CHANGELOG, LICENSE)
+docs/
+TESTING.md
+ANDROID_TESTING.md
+CONTRIBUTING.md
+SECURITY.md
+SECURITY_AUDIT_RESOLUTION.md
+CLEANUP_ACTION_PLAN.md
+REPOSITORY_ANALYSIS.md
+
+# CI/CD
+.github/
+.claude/
+
+# Test coverage
+coverage/
+
+# Development files
+jest.config.js
+jest.setup.js
+.eslintrc.js
+.eslintignore
+.prettierrc.json
+babel.config.js
