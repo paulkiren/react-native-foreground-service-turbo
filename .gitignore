@@ -38,3 +38,4 @@ dist/
 # Misc
 *.log
 .env
+.claude/settings.local.json
