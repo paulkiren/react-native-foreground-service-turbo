@@ -106,7 +106,7 @@ describe('ForegroundServiceManager', () => {
       await ForegroundServiceManager.start(configWithoutType);
 
       expect(console.warn).toHaveBeenCalledWith(
-        expect.stringContaining('serviceType not specified'),
+        expect.stringContaining('serviceType not specified')
       );
     });
 
@@ -122,7 +122,7 @@ describe('ForegroundServiceManager', () => {
         .mockResolvedValueOnce(false);
 
       await expect(ForegroundServiceManager.start(basicConfig)).rejects.toThrow(
-        'POST_NOTIFICATIONS permission not granted',
+        'POST_NOTIFICATIONS permission not granted'
       );
     });
 

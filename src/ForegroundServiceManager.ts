@@ -77,7 +77,7 @@ class ForegroundServiceManager {
     if (!config.serviceType) {
       console.warn(
         'Warning: serviceType not specified. Defaulting to "dataSync". ' +
-          'This is required for Android 14+.',
+          'This is required for Android 14+.'
       );
       config.serviceType = 'dataSync';
     }
@@ -93,7 +93,7 @@ class ForegroundServiceManager {
           '  await PermissionsAndroid.request(\n' +
           '    PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS\n' +
           '  );\n' +
-          '}',
+          '}'
       );
     }
 
