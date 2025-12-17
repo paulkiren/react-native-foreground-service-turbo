@@ -65,10 +65,16 @@ class NotificationHelper {
             return null;
         }
 
-        // Main notification intent - uses FLAG_IMMUTABLE for security
+        // Main notification intent - opens app and sends event
         Intent notificationIntent = new Intent(context, mainActivityClass);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         notificationIntent.putExtra("mainOnPress", bundle.getString("mainOnPress"));
         int uniqueInt1 = (int) (System.currentTimeMillis() & 0xfffffff);
+
+        // Also create broadcast intent for event delivery
+        Intent broadcastIntent = new Intent(context, NotificationEventReceiver.class);
+        broadcastIntent.setAction(NotificationEventReceiver.ACTION_NOTIFICATION_MAIN);
+        broadcastIntent.putExtra("mainOnPress", bundle.getString("mainOnPress"));
 
         // CRITICAL FIX: Use FLAG_IMMUTABLE for main intent (Android 12+ security requirement)
         int mainIntentFlags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -82,18 +88,19 @@ class NotificationHelper {
             mainIntentFlags
         );
 
-        // Button 1 intent - uses FLAG_MUTABLE (required for user interaction)
+        // Button 1 intent - sends event via broadcast
         if (bundle.getBoolean("button", false)) {
-            Intent notificationBtnIntent = new Intent(context, mainActivityClass);
+            Intent notificationBtnIntent = new Intent(context, NotificationEventReceiver.class);
+            notificationBtnIntent.setAction(NotificationEventReceiver.ACTION_NOTIFICATION_BUTTON);
             notificationBtnIntent.putExtra("buttonOnPress", bundle.getString("buttonOnPress"));
             int uniqueInt = (int) (System.currentTimeMillis() & 0xfffffff);
 
-            // Button intents need FLAG_MUTABLE for Android 12+
-            int buttonFlags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-                ? PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+            // Button intents use FLAG_IMMUTABLE with broadcast
+            int buttonFlags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                ? PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
                 : PendingIntent.FLAG_UPDATE_CURRENT;
 
-            pendingBtnIntent = PendingIntent.getActivity(
+            pendingBtnIntent = PendingIntent.getBroadcast(
                 context,
                 uniqueInt,
                 notificationBtnIntent,
@@ -101,18 +108,19 @@ class NotificationHelper {
             );
         }
 
-        // Button 2 intent - uses FLAG_MUTABLE (required for user interaction)
+        // Button 2 intent - sends event via broadcast
         if (bundle.getBoolean("button2", false)) {
-            Intent notificationBtn2Intent = new Intent(context, mainActivityClass);
+            Intent notificationBtn2Intent = new Intent(context, NotificationEventReceiver.class);
+            notificationBtn2Intent.setAction(NotificationEventReceiver.ACTION_NOTIFICATION_BUTTON);
             notificationBtn2Intent.putExtra("button2OnPress", bundle.getString("button2OnPress"));
             int uniqueInt2 = (int) (System.currentTimeMillis() & 0xfffffff);
 
-            // Button intents need FLAG_MUTABLE for Android 12+
-            int buttonFlags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-                ? PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+            // Button intents use FLAG_IMMUTABLE with broadcast
+            int buttonFlags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                ? PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
                 : PendingIntent.FLAG_UPDATE_CURRENT;
 
-            pendingBtn2Intent = PendingIntent.getActivity(
+            pendingBtn2Intent = PendingIntent.getBroadcast(
                 context,
                 uniqueInt2,
                 notificationBtn2Intent,

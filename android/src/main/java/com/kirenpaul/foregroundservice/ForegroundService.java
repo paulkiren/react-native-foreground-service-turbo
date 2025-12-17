@@ -332,11 +332,13 @@ public class ForegroundService extends Service {
 
             if (running == 0) {
                 Log.d(TAG, "Stopping foreground service");
+                cleanupResources();
                 stopSelf();
                 lastNotificationConfig = null;
             }
         } else {
             Log.d(TAG, "Service is not running, stopping anyway");
+            cleanupResources();
             stopSelf();
             lastNotificationConfig = null;
         }
@@ -348,9 +350,24 @@ public class ForegroundService extends Service {
     private void handleStopServiceAll() {
         Log.d(TAG, "Force stopping foreground service");
         running = 0;
+        cleanupResources();
         mInstance = null;
         lastNotificationConfig = null;
         stopSelf();
+    }
+
+    /**
+     * Clean up all resources (handler callbacks, tasks, etc.)
+     */
+    private void cleanupResources() {
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+            Log.d(TAG, "Handler callbacks cleared");
+        }
+        if (runnableCode != null) {
+            runnableCode = null;
+        }
+        taskConfig = null;
     }
 
     /**
