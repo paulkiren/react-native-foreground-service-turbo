@@ -5,32 +5,70 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.0.0] - 2025-12-17
+## [0.1.0] - 2025-12-17
 
-### Changed
+### Added - Initial Release
 
-- **Package Name**: Renamed from `@kirenpaul/rn-foreground-service-turbo` to `@kirenpaul/react-native-foreground-service-turbo`
-  - Follows React Native naming conventions for better discoverability
-  - Maintains scoped package namespace for security and branding
+- **TurboModule Architecture**: Complete implementation using React Native TurboModules for New Architecture support
+- **Android 14 Compliance**: Full support for foreground service types (dataSync, location, mediaPlayback)
+- **Android 13 Support**: POST_NOTIFICATIONS permission checking and handling
+- **Android 12+ PendingIntent Flags**: Proper FLAG_IMMUTABLE and FLAG_MUTABLE usage
+- **TypeScript Support**: Full TypeScript definitions for all APIs
+- **Service Type Manager**: Class for handling Android 14+ service type requirements
+- **Permission Checker**: Class for runtime permission validation
+- **Auto Setup**: Postinstall script automatically configures AndroidManifest.xml
+- **Comprehensive Documentation**: Complete README, API docs, and migration guide
+- **Task Management System**: Parallel task execution with 500ms sampling interval
+- **Event Handling**: Notification button click events with proper event delivery
 
-### Fixed - Critical Issues
+### Features
 
-- **Race Condition in Service State Management**: Added `serviceStarting` flag and native state synchronization to prevent duplicate service starts
-- **Missing Task Cleanup**: Tasks are now automatically cleared on service stop (configurable with `clearTasks` option)
-- **Native Handler Cleanup**: Added `cleanupResources()` method to properly clean up handler callbacks on service stop
-- **Notification Event Delivery**: Created `NotificationEventReceiver.java` to properly deliver notification button click events to React Native
+- **Service Lifecycle Management**
+  - `register()` - Register headless task runner
+  - `start(config)` - Start foreground service with notification
+  - `update(config)` - Update running notification
+  - `stop()` - Stop service (with optional task preservation)
+  - `stopAll()` - Force stop service and clear all tasks
+  - `is_running()` - Check service state
 
-### Breaking Changes
+- **Task Management**
+  - `add_task(task, options)` - Add async task to queue
+  - `update_task(task, options)` - Update existing task
+  - `remove_task(taskId)` - Remove task by ID
+  - `is_task_running(taskId)` - Check task state
+  - `remove_all_tasks()` - Clear all tasks
+  - `get_task(taskId)` - Get task details
+  - `get_all_tasks()` - Get all tasks
 
-- **stop() Method**: Now clears tasks by default. Use `stop({ clearTasks: false })` to preserve tasks.
+- **Notification Management**
+  - `cancel_notification(id)` - Cancel specific notification
+  - `eventListener(callback)` - Listen for notification events
 
-### Migration
+### Technical Details
 
-- See [MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md) for detailed upgrade instructions
+- **Minimum Requirements**
+  - React Native 0.68.0+
+  - Android SDK 25+ (Android 7.1+)
+  - Node.js 16+
+
+- **Build Configuration**
+  - Target SDK: 34 (Android 14)
+  - Compile SDK: 34
+  - Build Tools: 34.0.0
+  - AGP: 8.1.0
+  - Java: 11
+
+- **Dependencies**
+  - AndroidX Core: 1.12.0
+  - WorkManager: 2.9.0
+
+### Security
+
+- PendingIntent with FLAG_IMMUTABLE for security compliance
+- Services declared with `android:exported="false"`
+- Runtime permission validation for all operations
 
 ---
-
-## [1.0.0] - 2025-12-17
 
 ### Added
 
@@ -68,34 +106,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-- **PendingIntent Security**: Main notification intents now use FLAG_IMMUTABLE (security best practice)
-- **Service Export**: Services now properly declared with `android:exported="false"`
-- **Permission Validation**: Runtime checks for all required permissions before service start
+- PendingIntent with FLAG_IMMUTABLE for security compliance
+- Services declared with `android:exported="false"`
+- Runtime permission validation for all operations
 
-### API
+---
 
-**No Breaking Changes to Existing API** - 100% feature parity maintained:
+## Future Releases
 
-- `register()` - Unchanged
-- `start(config)` - Added optional `serviceType` field (required for Android 14+)
-- `update(config)` - Added optional `serviceType` field
-- `stop()` - Unchanged
-- `stopAll()` - Unchanged
-- `is_running()` - Unchanged
-- `add_task(task, options)` - Unchanged
-- `update_task(task, options)` - Unchanged
-- `remove_task(taskId)` - Unchanged
-- `is_task_running(taskId)` - Unchanged
-- `remove_all_tasks()` - Unchanged
-- `get_task(taskId)` - Unchanged
-- `get_all_tasks()` - Unchanged
-- `cancel_notification(id)` - Unchanged
-- `eventListener(callback)` - Unchanged
+This is the initial beta release (0.1.0). Future updates will include:
+- Bug fixes and stability improvements
+- Additional features based on community feedback
+- Performance optimizations
+- Enhanced documentation and examples
 
-**New API:**
-- `checkPostNotificationsPermission()` - Check if POST_NOTIFICATIONS permission is granted
-
-### Documentation
+The package will be promoted to 1.0.0 once it has been thoroughly tested in production environments.### Documentation
 
 - Complete README with usage examples
 - Comprehensive API reference

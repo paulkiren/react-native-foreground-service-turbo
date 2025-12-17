@@ -1,6 +1,6 @@
 {
   "name": "@kirenpaul/react-native-foreground-service-turbo",
-  "version": "3.0.0",
+  "version": "0.1.0",
   "description": "Modern Android foreground service with TurboModule support for React Native 0.68+. Full Android 14 compliance with task management, customizable notifications, and event handling.",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
