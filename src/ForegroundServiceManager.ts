@@ -397,7 +397,9 @@ class ForegroundServiceManager {
    */
   private static taskRunner = async (): Promise<void> => {
     try {
-      if (!this.serviceRunning) return;
+      if (!this.serviceRunning) {
+        return;
+      }
 
       const now = Date.now();
       const promises: Promise<void>[] = [];
@@ -429,12 +431,10 @@ class ForegroundServiceManager {
    * @private
    */
   private static generateTaskId(): string {
-    return 'x'
-      .repeat(12)
-      .replace(/[xy]/g, () => {
-        const r = (Math.random() * 16) | 0;
-        return r.toString(16);
-      });
+    return 'x'.repeat(12).replace(/[xy]/g, () => {
+      const r = (Math.random() * 16) | 0;
+      return r.toString(16);
+    });
   }
 
   /**

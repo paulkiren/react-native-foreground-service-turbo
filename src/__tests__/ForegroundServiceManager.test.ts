@@ -115,15 +115,19 @@ describe('ForegroundServiceManager', () => {
     it('should check POST_NOTIFICATIONS permission', async () => {
       await ForegroundServiceManager.start(basicConfig);
 
-      expect(NativeForegroundService.checkPostNotificationsPermission).toHaveBeenCalled();
+      expect(
+        NativeForegroundService.checkPostNotificationsPermission,
+      ).toHaveBeenCalled();
     });
 
     it('should throw error if POST_NOTIFICATIONS permission denied', async () => {
-      jest.spyOn(NativeForegroundService, 'checkPostNotificationsPermission')
+      jest
+        .spyOn(NativeForegroundService, 'checkPostNotificationsPermission')
         .mockResolvedValueOnce(false);
 
-      await expect(ForegroundServiceManager.start(basicConfig))
-        .rejects.toThrow('POST_NOTIFICATIONS permission not granted');
+      await expect(ForegroundServiceManager.start(basicConfig)).rejects.toThrow(
+        'POST_NOTIFICATIONS permission not granted'
+      );
     });
 
     it('should start task runner after starting service', async () => {
@@ -143,7 +147,9 @@ describe('ForegroundServiceManager', () => {
 
       // Should only be called once
       expect(NativeForegroundService.startService).toHaveBeenCalledTimes(1);
-      expect(console.log).toHaveBeenCalledWith('Foreground service is already running.');
+      expect(console.log).toHaveBeenCalledWith(
+        'Foreground service is already running.'
+      );
     });
 
     it('should do nothing on iOS', async () => {
@@ -424,10 +430,14 @@ describe('ForegroundServiceManager', () => {
         const mockTask = jest.fn();
 
         ForegroundServiceManager.add_task(mockTask, { taskId: 'test-task' });
-        expect(ForegroundServiceManager.is_task_running('test-task')).toBe(true);
+        expect(ForegroundServiceManager.is_task_running('test-task')).toBe(
+          true,
+        );
 
         ForegroundServiceManager.remove_task('test-task');
-        expect(ForegroundServiceManager.is_task_running('test-task')).toBe(false);
+        expect(ForegroundServiceManager.is_task_running('test-task')).toBe(
+          false,
+        );
       });
 
       it('should do nothing if task does not exist', () => {
@@ -441,11 +451,15 @@ describe('ForegroundServiceManager', () => {
       it('should return true for existing task', () => {
         ForegroundServiceManager.add_task(jest.fn(), { taskId: 'test-task' });
 
-        expect(ForegroundServiceManager.is_task_running('test-task')).toBe(true);
+        expect(ForegroundServiceManager.is_task_running('test-task')).toBe(
+          true,
+        );
       });
 
       it('should return false for non-existent task', () => {
-        expect(ForegroundServiceManager.is_task_running('non-existent')).toBe(false);
+        expect(ForegroundServiceManager.is_task_running('non-existent')).toBe(
+          false,
+        );
       });
     });
 
@@ -479,9 +493,9 @@ describe('ForegroundServiceManager', () => {
 
         const tasks = ForegroundServiceManager.get_all_tasks();
         expect(Object.keys(tasks)).toHaveLength(3);
-        expect(tasks['task1']).toBeDefined();
-        expect(tasks['task2']).toBeDefined();
-        expect(tasks['task3']).toBeDefined();
+        expect(tasks.task1).toBeDefined();
+        expect(tasks.task2).toBeDefined();
+        expect(tasks.task3).toBeDefined();
       });
 
       it('should return copy of tasks (not reference)', () => {
@@ -596,12 +610,16 @@ describe('ForegroundServiceManager', () => {
           onLoop: false,
         });
 
-        expect(ForegroundServiceManager.is_task_running('test-task')).toBe(true);
+        expect(ForegroundServiceManager.is_task_running('test-task')).toBe(
+          true,
+        );
 
         const taskRunner = (ForegroundServiceManager as any).taskRunner;
         await taskRunner();
 
-        expect(ForegroundServiceManager.is_task_running('test-task')).toBe(false);
+        expect(ForegroundServiceManager.is_task_running('test-task')).toBe(
+          false,
+        );
       });
 
       it('should keep task if onLoop is true', async () => {
@@ -623,7 +641,9 @@ describe('ForegroundServiceManager', () => {
         const taskRunner = (ForegroundServiceManager as any).taskRunner;
         await taskRunner();
 
-        expect(ForegroundServiceManager.is_task_running('test-task')).toBe(true);
+        expect(ForegroundServiceManager.is_task_running('test-task')).toBe(
+          true,
+        );
       });
 
       it('should not execute tasks if service is not running', async () => {
@@ -653,9 +673,18 @@ describe('ForegroundServiceManager', () => {
           serviceType: 'dataSync',
         });
 
-        ForegroundServiceManager.add_task(mockTask1, { taskId: 'task1', delay: 500 });
-        ForegroundServiceManager.add_task(mockTask2, { taskId: 'task2', delay: 500 });
-        ForegroundServiceManager.add_task(mockTask3, { taskId: 'task3', delay: 500 });
+        ForegroundServiceManager.add_task(mockTask1, {
+          taskId: 'task1',
+          delay: 500,
+        });
+        ForegroundServiceManager.add_task(mockTask2, {
+          taskId: 'task2',
+          delay: 500,
+        });
+        ForegroundServiceManager.add_task(mockTask3, {
+          taskId: 'task3',
+          delay: 500,
+        });
 
         const taskRunner = (ForegroundServiceManager as any).taskRunner;
         await taskRunner();
@@ -671,7 +700,9 @@ describe('ForegroundServiceManager', () => {
     it('should cancel notification by id', async () => {
       await ForegroundServiceManager.cancel_notification(1);
 
-      expect(NativeForegroundService.cancelNotification).toHaveBeenCalledWith(1);
+      expect(NativeForegroundService.cancelNotification).toHaveBeenCalledWith(
+        1,
+      );
     });
 
     it('should do nothing on iOS', async () => {

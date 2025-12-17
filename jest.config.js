@@ -5,14 +5,8 @@ module.exports = {
     '<rootDir>/lib/',
   ],
   setupFiles: ['<rootDir>/jest.setup.js'],
-  testMatch: [
-    '**/__tests__/**/*.test.[jt]s?(x)',
-  ],
-  collectCoverageFrom: [
-    'src/**/*.{ts,tsx}',
-    '!src/**/*.d.ts',
-    '!src/types.ts',
-  ],
+  testMatch: ['**/__tests__/**/*.test.[jt]s?(x)'],
+  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.d.ts', '!src/types.ts'],
   coverageThreshold: {
     global: {
       branches: 70,

@@ -11,7 +11,13 @@ export type NotificationVisibility = 'private' | 'public' | 'secret';
 /**
  * Notification importance levels
  */
-export type NotificationImportance = 'none' | 'min' | 'low' | 'default' | 'high' | 'max';
+export type NotificationImportance =
+  | 'none'
+  | 'min'
+  | 'low'
+  | 'default'
+  | 'high'
+  | 'max';
 
 /**
  * Notification button configuration
