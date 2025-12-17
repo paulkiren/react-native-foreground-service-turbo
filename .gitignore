@@ -6,6 +6,9 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
+# coverage
+coverage/
+
 # Build
 lib/
 dist/
@@ -35,3 +38,4 @@ dist/
 # Misc
 *.log
 .env
+.claude/settings.local.json

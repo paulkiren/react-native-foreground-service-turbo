@@ -2,8 +2,8 @@
 
 ## ✅ Completed: New React Native Foreground Service TurboModule Library
 
-**Package:** `@kirenpaul/rn-foreground-service-turbo`
-**Version:** 1.0.0
+**Package:** `@kirenpaul/react-native-foreground-service-turbo`
+**Version:** 3.0.0
 **Architecture:** TurboModule (React Native New Architecture)
 **Android Support:** API 25-34 (Android 7.1 - Android 14)
 

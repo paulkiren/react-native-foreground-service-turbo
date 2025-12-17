@@ -1,0 +1,48 @@
+# Auto-labeling configuration for Pull Requests
+# https://github.com/actions/labeler
+
+documentation:
+  - '**/*.md'
+  - 'docs/**/*'
+
+dependencies:
+  - 'package.json'
+  - 'package-lock.json'
+  - 'yarn.lock'
+
+typescript:
+  - '**/*.ts'
+  - '**/*.tsx'
+  - 'tsconfig*.json'
+
+javascript:
+  - '**/*.js'
+  - '**/*.jsx'
+
+android:
+  - 'android/**/*'
+  - '**/*.java'
+  - '**/*.gradle'
+
+tests:
+  - '**/__tests__/**/*'
+  - '**/*.test.ts'
+  - '**/*.test.tsx'
+  - '**/*.test.js'
+  - '**/*.test.jsx'
+  - 'jest.config.js'
+  - 'jest.setup.js'
+
+ci:
+  - '.github/**/*'
+
+configuration:
+  - '.eslintrc.*'
+  - '.prettierrc*'
+  - 'babel.config.js'
+  - '.gitignore'
+  - '.npmignore'
+
+build:
+  - 'scripts/**/*'
+  - 'package.json'

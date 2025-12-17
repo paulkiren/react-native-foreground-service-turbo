@@ -24,5 +24,15 @@
         <service
             android:name=".ForegroundServiceTask"
             android:exported="false" />
+
+        <!-- Notification event receiver for button clicks -->
+        <receiver
+            android:name=".NotificationEventReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.kirenpaul.foregroundservice.NOTIFICATION_BUTTON" />
+                <action android:name="com.kirenpaul.foregroundservice.NOTIFICATION_MAIN" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

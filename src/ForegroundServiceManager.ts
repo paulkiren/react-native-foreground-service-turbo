@@ -29,6 +29,7 @@ import type {
 class ForegroundServiceManager {
   private static tasks: Record<string, Task> = {};
   private static serviceRunning = false;
+  private static serviceStarting = false; // Prevent race conditions
   private static samplingInterval = 500; // milliseconds
   private static eventEmitter = new NativeEventEmitter(
     NativeModules.ForegroundService
@@ -104,7 +105,23 @@ class ForegroundServiceManager {
       );
     }
 
-    if (!this.serviceRunning) {
+    // Prevent race condition: Check if already starting
+    if (this.serviceStarting) {
+      console.log('Service is already starting, please wait...');
+      return;
+    }
+
+    // Check native service state to sync with actual state
+    const nativeRunningCount = await NativeForegroundService.isRunning();
+    if (nativeRunningCount > 0) {
+      this.serviceRunning = true;
+      console.log('Foreground service is already running.');
+      return;
+    }
+
+    try {
+      this.serviceStarting = true;
+
       // Convert friendly API to native format
       const nativeConfig = this.convertToNativeConfig(config);
 
@@ -118,8 +135,8 @@ class ForegroundServiceManager {
         loopDelay: this.samplingInterval,
         onLoop: true,
       });
-    } else {
-      console.log('Foreground service is already running.');
+    } finally {
+      this.serviceStarting = false;
     }
   }
 
@@ -152,18 +169,34 @@ class ForegroundServiceManager {
    *
    * If start() was called multiple times, stop() must be called the same
    * number of times to fully stop the service.
+   *
+   * @param options Optional configuration
+   * @param options.clearTasks Whether to clear all tasks (default: false)
    */
-  static async stop(): Promise<void> {
+  static async stop(options?: { clearTasks?: boolean }): Promise<void> {
     if (Platform.OS !== 'android') {
       return;
     }
 
-    this.serviceRunning = false;
     await NativeForegroundService.stopService();
+
+    // Check if service actually stopped by querying native state
+    const nativeRunningCount = await NativeForegroundService.isRunning();
+    if (nativeRunningCount === 0) {
+      this.serviceRunning = false;
+
+      // Clear tasks if requested or if service fully stopped
+      if (options?.clearTasks !== false) {
+        this.tasks = {};
+        console.log('Service stopped and all tasks cleared');
+      }
+    }
   }
 
   /**
    * Force stop the foreground service regardless of start counter
+   *
+   * This will also clear all tasks and reset state
    */
   static async stopAll(): Promise<void> {
     if (Platform.OS !== 'android') {
@@ -171,7 +204,14 @@ class ForegroundServiceManager {
     }
 
     this.serviceRunning = false;
+    this.serviceStarting = false;
+
+    // Clear all tasks immediately
+    this.tasks = {};
+
     await NativeForegroundService.stopServiceAll();
+
+    console.log('Service force stopped and all tasks cleared');
   }
 
   /**

@@ -1,0 +1,214 @@
+name: PR Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  pr-title:
+    name: Validate PR Title
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check PR title format
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            chore
+            ci
+            build
+            revert
+          requireScope: false
+          subjectPattern: ^[A-Z].+$
+          subjectPatternError: |
+            The subject "{subject}" found in the pull request title "{title}"
+            didn't match the configured pattern. Please ensure that the subject
+            starts with an uppercase character.
+
+  pr-size:
+    name: Check PR Size
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check PR size
+        run: |
+          # Get changed files count
+          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | wc -l)
+
+          # Get lines changed
+          LINES_CHANGED=$(git diff --stat origin/${{ github.base_ref }}...HEAD | tail -1 | awk '{print $4 + $6}')
+
+          echo "Changed files: $CHANGED_FILES"
+          echo "Lines changed: $LINES_CHANGED"
+
+          if [ "$CHANGED_FILES" -gt 50 ]; then
+            echo "⚠️ Warning: This PR changes more than 50 files. Consider splitting it."
+          fi
+
+          if [ "$LINES_CHANGED" -gt 1000 ]; then
+            echo "⚠️ Warning: This PR changes more than 1000 lines. Consider splitting it."
+          fi
+
+  pr-labels:
+    name: Auto-label PR
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Label PR based on changes
+        uses: actions/labeler@v5
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/labeler.yml
+
+  pr-comment:
+    name: Comment on PR
+    runs-on: ubuntu-latest
+    if: github.event.action == 'opened'
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Comment on new PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 👋 Thanks for your contribution!
+
+              Your PR will be reviewed soon. In the meantime, please ensure:
+
+              - ✅ Tests are passing
+              - ✅ Code follows the project's style guide
+              - ✅ Documentation is updated (if needed)
+              - ✅ CHANGELOG.md is updated (for user-facing changes)
+
+              ### Useful Commands
+
+              \`\`\`bash
+              npm test          # Run tests
+              npm run lint      # Check code style
+              npm run typescript # Type check
+              \`\`\`
+
+              See [CONTRIBUTING.md](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/CONTRIBUTING.md) for more details.`
+            })
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+
+      - name: Check for sensitive files
+        run: |
+          if [ -f ".env" ]; then
+            echo "⚠️ Warning: .env file found in repository!"
+            exit 1
+          fi
+
+          if grep -r "api[_-]key\|password\|secret" --include="*.js" --include="*.ts" --include="*.jsx" --include="*.tsx" .; then
+            echo "⚠️ Warning: Potential secrets found in code!"
+            exit 1
+          fi
+        continue-on-error: true
+
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: moderate
+          allow-licenses: MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC
+
+  validate-android:
+    name: Validate Android Code
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Validate Android manifest
+        run: |
+          MANIFEST="android/src/main/AndroidManifest.xml"
+          if [ -f "$MANIFEST" ]; then
+            echo "✅ AndroidManifest.xml found"
+
+            # Check for required permissions
+            if grep -q "android.permission.FOREGROUND_SERVICE" "$MANIFEST"; then
+              echo "✅ FOREGROUND_SERVICE permission found"
+            else
+              echo "⚠️ Warning: FOREGROUND_SERVICE permission not found"
+            fi
+
+            # Check for services
+            if grep -q "android:name=\".ForegroundService\"" "$MANIFEST"; then
+              echo "✅ ForegroundService declared"
+            else
+              echo "⚠️ Warning: ForegroundService not declared"
+            fi
+          else
+            echo "❌ AndroidManifest.xml not found"
+            exit 1
+          fi
+
+      - name: Validate Java sources
+        run: |
+          JAVA_FILES=$(find android/src/main/java -name "*.java" | wc -l)
+          echo "Found $JAVA_FILES Java files"
+
+          if [ "$JAVA_FILES" -eq 0 ]; then
+            echo "⚠️ Warning: No Java source files found"
+          else
+            echo "✅ Java source files validated"
+          fi

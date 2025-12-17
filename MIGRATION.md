@@ -1,6 +1,6 @@
 # Migration Guide: v2.x → v3.x (TurboModule)
 
-This guide helps you migrate from `@kirenpaul/rn-foreground-service` (v2.x) to `@kirenpaul/rn-foreground-service-turbo` (v3.x).
+This guide helps you migrate from `@kirenpaul/rn-foreground-service` (v2.x) to `@kirenpaul/react-native-foreground-service-turbo` (v3.x).
 
 ## Overview of Changes
 
@@ -33,14 +33,14 @@ The v3.x release is a complete rewrite using React Native's TurboModule architec
 npm uninstall @kirenpaul/rn-foreground-service
 
 # Install new package
-npm install @kirenpaul/rn-foreground-service-turbo
+npm install @kirenpaul/react-native-foreground-service-turbo
 ```
 
 Or with Yarn:
 
 ```bash
 yarn remove @kirenpaul/rn-foreground-service
-yarn add @kirenpaul/rn-foreground-service-turbo
+yarn add @kirenpaul/react-native-foreground-service-turbo
 ```
 
 ### Step 2: Update Imports
@@ -52,7 +52,7 @@ import ReactNativeForegroundService from '@kirenpaul/rn-foreground-service';
 
 **After (v3.x):**
 ```typescript
-import ForegroundService from '@kirenpaul/rn-foreground-service-turbo';
+import ForegroundService from '@kirenpaul/react-native-foreground-service-turbo';
 ```
 
 ### Step 3: Update AndroidManifest.xml
