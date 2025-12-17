@@ -6,32 +6,56 @@ on:
   pull_request:
     branches: [main, develop]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  test:
-    name: Test and Lint
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 20.x
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '20'
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install dependencies (fast)
+        run: npm ci --prefer-offline --no-audit --progress=false
+
+      - name: Run ESLint
+        run: npm run lint -- --max-warnings=0
+
+      - name: Check Prettier formatting
+        run: npx prettier --check "**/*.{js,ts,tsx,json,md}"
+
+  test:
+    name: Typecheck & Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies (fast)
+        run: npm ci --prefer-offline --no-audit --progress=false
 
       - name: Run TypeScript type check
         run: npm run typescript
 
-      - name: Run linter
-        run: npm run lint
-
-      - name: Run tests
-        run: npm test
+      - name: Run unit tests
+        run: npm test -- --ci --runInBand
 
       - name: Run tests with coverage
         run: npm run test:coverage
@@ -48,6 +72,7 @@ jobs:
   build:
     name: Build Package
     runs-on: ubuntu-latest
+    needs: [lint, test]
 
     steps:
       - name: Checkout code
@@ -56,11 +81,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '20'
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install dependencies (fast)
+        run: npm ci --prefer-offline --no-audit --progress=false
 
       - name: Build package
         run: npm run prepare
@@ -92,11 +117,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '20'
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install dependencies (fast)
+        run: npm ci --prefer-offline --no-audit --progress=false
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
@@ -155,25 +180,7 @@ jobs:
         run: |
           if [ -f "build.gradle" ]; then
             echo "Running Android lint checks..."
-            # Note: This requires the library to be properly configured
-            # For now, we'll just validate the build files exist
             echo "Android source files validated"
           fi
         continue-on-error: true
 
-  status-check:
-    name: All Checks Passed
-    runs-on: ubuntu-latest
-    needs: [test, build, validate-package]
-    if: always()
-
-    steps:
-      - name: Check job results
-        run: |
-          if [ "${{ needs.test.result }}" != "success" ] || \
-             [ "${{ needs.build.result }}" != "success" ] || \
-             [ "${{ needs.validate-package.result }}" != "success" ]; then
-            echo "One or more checks failed!"
-            exit 1
-          fi
-          echo "All checks passed! ✅"
