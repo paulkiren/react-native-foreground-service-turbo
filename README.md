@@ -3,6 +3,8 @@
 Modern React Native foreground service library with TurboModule support. Full Android 14 compliance with task management, customizable notifications, and event handling.
 
 [![NPM Version](https://img.shields.io/npm/v/@kirenpaul/react-native-foreground-service-turbo.svg)](https://www.npmjs.com/package/@kirenpaul/react-native-foreground-service-turbo)
+[![CI](https://github.com/paulkiren/react-native-foreground-service-turbo/actions/workflows/ci.yml/badge.svg)](https://github.com/paulkiren/react-native-foreground-service-turbo/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/paulkiren/react-native-foreground-service-turbo/branch/main/graph/badge.svg)](https://codecov.io/gh/paulkiren/react-native-foreground-service-turbo)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Android-green.svg)](https://www.android.com)
 [![React Native](https://img.shields.io/badge/React%20Native-0.68+-blue.svg)](https://reactnative.dev/)
