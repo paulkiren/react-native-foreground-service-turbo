@@ -1,0 +1,62 @@
+buildscript {
+    ext.safeExtGet = {prop, fallback ->
+        rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+    }
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 34
+    buildToolsVersion '34.0.0'
+
+    // Required for AGP 7.0+
+    namespace 'com.kirenpaul.foregroundservice'
+
+    defaultConfig {
+        minSdkVersion 25  // Android 7.1
+        targetSdkVersion 34  // Android 14
+        versionCode 1
+        versionName "1.0.0"
+
+        buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", "true"
+        buildConfigField "int", "MIN_SDK_VERSION", "25"
+        buildConfigField "int", "TARGET_SDK_VERSION", "34"
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    lintOptions {
+        abortOnError true
+        disable 'MissingTranslation'
+        warning 'InvalidPackage'
+    }
+}
+
+repositories {
+    google()
+    mavenCentral()
+    maven {
+        // React Native's repository
+        url "$rootDir/../node_modules/react-native/android"
+    }
+}
+
+dependencies {
+    //noinspection GradleDynamicVersion
+    implementation 'com.facebook.react:react-android'
+    implementation 'androidx.core:core:1.12.0'
+    implementation 'androidx.work:work-runtime:2.9.0'
+}
