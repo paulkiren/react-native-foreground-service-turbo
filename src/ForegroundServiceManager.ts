@@ -415,10 +415,9 @@ class ForegroundServiceManager {
    * @private
    */
   private static generateTaskId(): string {
-    return 'x'.repeat(12).replace(/[xy]/g, () => {
-      const r = (Math.random() * 16) | 0;
-      return r.toString(16);
-    });
+    const timestamp = Date.now().toString(36);
+    const randomPart = Math.random().toString(36).substring(2, 9);
+    return `task_${timestamp}_${randomPart}`;
   }
 
   /**
