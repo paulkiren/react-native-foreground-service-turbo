@@ -39,3 +39,6 @@ dist/
 *.log
 .env
 .claude/settings.local.json
+
+# Internal Documentation
+docs/internal/
