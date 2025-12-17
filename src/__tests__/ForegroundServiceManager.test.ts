@@ -34,6 +34,7 @@ describe("ForegroundServiceManager", () => {
     // Reset internal state
     (ForegroundServiceManager as any).tasks = {};
     (ForegroundServiceManager as any).serviceRunning = false;
+    (ForegroundServiceManager as any).serviceStarting = false;
   });
 
   afterEach(() => {
@@ -137,6 +138,11 @@ describe("ForegroundServiceManager", () => {
     });
 
     it("should not start service again if already running", async () => {
+      // Mock isRunning to return 1 (service running) on second call
+      (NativeForegroundService.isRunning as jest.Mock)
+        .mockResolvedValueOnce(0)  // First call - not running
+        .mockResolvedValueOnce(1); // Second call - already running
+
       await ForegroundServiceManager.start(basicConfig);
       await ForegroundServiceManager.start(basicConfig);
 
