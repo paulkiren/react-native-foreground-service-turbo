@@ -21,7 +21,7 @@ jest.mock("../../turbomodule-specs/NativeForegroundService", () => ({
   },
 }));
 
-import { Platform, NativeModules } from "react-native";
+import { Platform } from "react-native";
 import NativeForegroundService from "../../turbomodule-specs/NativeForegroundService";
 import ForegroundServiceManager from "../ForegroundServiceManager";
 import type { StartServiceConfig } from "../types";
