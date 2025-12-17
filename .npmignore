@@ -10,6 +10,13 @@ __mocks__/
 **/test/
 android/src/test/
 
+# Build artifacts
+.gradle/
+android/.gradle/
+android/build/
+android/.cxx/
+**/build/
+
 # Config
 .prettierrc.js
 tsconfig.json
